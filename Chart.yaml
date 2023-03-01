@@ -1,0 +1,10 @@
+apiVersion: v2
+name: cert-manager-blueprints
+description: cert-manager with certificate and cluster issuer for route53
+type: application
+version: 0.1.0
+dependencies:
+  - name: cert-manager
+    version: 1.11.0
+    repository: https://charts.jetstack.io
+    condition: certManager.enabled
