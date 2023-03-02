@@ -75,9 +75,13 @@ jobs:
         with:
            version: latest
            token: ${{ secrets.GITHUB_TOKEN }}
+  
+      - run: cat Chart.lock
 
       - name: Update helm dependency
         run: helm dep up
+
+      - run: cat Chart.lock
 
       - name: Push changes
         uses: actions-x/commit@v6
