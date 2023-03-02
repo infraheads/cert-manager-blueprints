@@ -3,7 +3,9 @@ name: Update version
 on:
   schedule:
     - cron: '*/1 * * * *'
-  workflow_dispatch:
+  push:
+    branches: 
+      - main
     
 jobs:
   check_updates:
@@ -33,6 +35,4 @@ jobs:
         run: echo "package=$(curl https://artifacthub.io/api/v1/packages/helm/cert-manager/cert-manager | jq .version)" >> $GITHUB_OUTPUT
         
       - name: Set version
-        if: contains(steps.current_version.outputs.dependency, steps.actual_version.outputs.package) == true
-        run: echo "Hello World!"
-        
+        run: echo ${{ steps.actual_version.outputs.package }}
