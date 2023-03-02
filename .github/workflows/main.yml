@@ -72,7 +72,7 @@ jobs:
           force: 'false'
     
       - name: Change dep version on Chart.yaml file
-        run: yq e -i '.dependencies[0].version = "${{ needs.check_updates.outputs.version }}"' Chart.yaml
+        run: yq e -i '.dependencies[0].version = ${{ needs.check_updates.outputs.version }}' Chart.yaml
         
       - run: cat Chart.yaml
     
