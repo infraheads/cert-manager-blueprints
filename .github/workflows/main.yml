@@ -86,7 +86,7 @@ jobs:
         with:
           email: hakob.mkoyan771@gmail.com
           name: Dependency version update
-          branch: main
+          branch: pipeline
           files: .
           repository: https://github.com/infraheads/cert-manager-blueprints
           token: ${{ secrets.TOKEN }}
