@@ -20,7 +20,7 @@ jobs:
           ref: pipeline
         
       - name: Install yq & jq
-        run: sudo snap install yq -y && sudo apt install jq -y
+        run: sudo snap install yq && sudo apt install jq -y
         
       - name: Dependency current version
         id: current_version
