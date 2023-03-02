@@ -13,7 +13,7 @@ When deploying this chart, first, the crds and cert manager of official cert man
 ## Cert Manager version updates
 Workflow will check every sunday at 12am if there is newer version of cert-manager dependency. If no, nothing will be changed, if yes the dependency will be updated after which pushed to the repository.
 
-## Templates descriptions
+## Templates' descriptions
 > __Note__
 The keywords are not explained below, as you can see them simply typing **kubectl explain resource kind**.
 
