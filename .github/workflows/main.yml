@@ -59,4 +59,4 @@ jobs:
            version: latest
            token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: helm dep up
+      - run: helm dep up; ls charts
