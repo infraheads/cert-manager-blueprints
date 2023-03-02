@@ -10,6 +10,9 @@ As users of official cert manager should deploy their resources like 'Certificat
 ## How?
 When deploying this chart, first, the crds and cert manager of official cert manager helm chart are being deployed, after that, in the same namespace where you deployed this chart, the resources ClusterIssuer, Certificate and Secret will be deployed.
 
+## Cert Manager version updates
+Workflow will check every sunday at 12am if there is newer version of cert-manager dependency. If no, nothing will be changed, if yes the dependency will be updated after which pushed to the repository.
+
 ## Templates descriptions
 > __Note__
 The keywords are not explained below, as you can see them simply typing **kubectl explain resource kind**.
