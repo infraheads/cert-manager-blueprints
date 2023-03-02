@@ -1,8 +1,8 @@
-name: Update version
+name: Update dependency version
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
+    - cron: '0 0 * * 0'
   workflow_dispatch:
   
 jobs:
@@ -79,7 +79,7 @@ jobs:
       - name: Update helm dependency
         run: helm dep up
 
-      - name: push
+      - name: Push changes
         uses: actions-x/commit@v6
         with:
           email: hakob.mkoyan771@gmail.com
