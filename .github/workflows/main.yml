@@ -35,4 +35,5 @@ jobs:
         run: echo "package=$(curl https://artifacthub.io/api/v1/packages/helm/cert-manager/cert-manager | jq .version)" >> $GITHUB_OUTPUT
         
       - name: Set version
+        if: contains(steps.actual_version.outputs.package, steps.current_version.outputs.dependency)
         run: echo ${{ steps.actual_version.outputs.package }}; echo ${{ steps.current_version.outputs.dependency }}
