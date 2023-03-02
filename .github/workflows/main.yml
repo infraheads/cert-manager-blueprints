@@ -50,10 +50,9 @@ jobs:
   
   update_package:
     name: Update dependency
-  
+    if: success()  
     needs: 
       - check_updates
-    if: success()
     
     runs-on: 
       - ubuntu-latest
@@ -74,11 +73,22 @@ jobs:
       - name: Change dep version on Chart.yaml file
         run: yq e -i '.dependencies[0].version = ${{ needs.check_updates.outputs.version }}' Chart.yaml
         
-      - run: cat Chart.yaml
-    
       - uses: azure/setup-helm@v3
         with:
            version: latest
            token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: helm dep up; ls charts
+      - name: Update helm dependency
+        run: helm dep up
+
+      - name: push
+        uses: actions-x/commit@v6
+        with:
+          email: hakob.mkoyan771@gmail.com
+          name: Dependency version update
+          branch: main
+          files: .
+          repository: https://github.com/infraheads/cert-manager-blueprints
+          token: ${{ secrets.TOKEN }}
+          force: true
+          directory: .
