@@ -6,7 +6,7 @@ on:
   push:
     branches: 
       - main
-    
+  
 jobs:
   check_updates:
     name: Check dependent package version updates
