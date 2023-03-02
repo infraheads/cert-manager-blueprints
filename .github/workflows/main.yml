@@ -1,0 +1,35 @@
+on:
+  schedule:
+    - cron: '* * * * *'
+    
+jobs:
+  check_updates:
+    name: Check dependent package version updates
+    
+    runs-on: 
+      - ubuntu-latest
+      
+    outputs:
+      version: ${{ steps.actual_version.outputs.package }}
+    
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+        with:
+          ref: pipeline
+        
+      - name: Install yq & jq
+        run: sudo apt install yq -y && sudo apt install jq -y
+        
+      - name: Dependency current version
+        id: current_version
+        run: echo "dependency=$(cat Chart.yaml | yq .dependencies[0].version)" >> $GITHUB_OUTPUT
+        
+      - name: Dependency actual version
+        id: actual_version
+        run: echo "package=$(curl https://artifacthub.io/api/v1/packages/helm/cert-manager/cert-manager | jq .version)" >> $GITHUB_OUTPUT
+        
+      - name: Set version
+        if: contains(steps.current_version.outputs.dependency, steps.actual_version.outputs.package) == true
+        run: echo "Hello World!"
+        
