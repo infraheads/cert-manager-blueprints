@@ -1,3 +1,5 @@
+name: Update version
+
 on:
   schedule:
     - cron: '*/1 * * * *'
