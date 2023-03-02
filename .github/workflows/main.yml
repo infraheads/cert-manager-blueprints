@@ -79,9 +79,15 @@ jobs:
       - name: Delete old dependency chart
         run: rm -rf ./charts/*
 
+      - name: Delete old CRDs
+        run: rm -rf ./crds/*
+
       - name: Update helm dependency
         run: helm dep up
 
+      - name: Get the new CRDs
+        run: curl -sSL -o ./crds/cert-manager.crds.yaml 'https://github.com/cert-manager/cert-manager/releases/download/v${{ needs.check_updates.outputs.version }}/cert-manager.crds.yaml'
+        
       - name: Push changes
         uses: actions-x/commit@v6
         with:
