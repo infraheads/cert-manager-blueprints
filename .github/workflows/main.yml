@@ -30,18 +30,21 @@ jobs:
           download-compressed: 'true'
           force: 'false'
           
-      - name: Install jq
-        run: sudo apt install jq -y
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v1.0.1
+        with:
+          version: '1.6'
+          force: 'false'
         
-      - name: Dependency current version
+      - name: Current version
         id: current_version
         run: echo "dependency=$(cat Chart.yaml | yq .dependencies[0].version)" >> $GITHUB_OUTPUT
         
-      - name: Dependency actual version
+      - name: Actual version
         id: actual_version
         run: echo "package=$(curl https://artifacthub.io/api/v1/packages/helm/cert-manager/cert-manager | jq .version)" >> $GITHUB_OUTPUT
         
-      - name: Set version 
+      - name: Check for new version
         if: contains(steps.actual_version.outputs.package, steps.current_version.outputs.dependency)
         run: exit 1
   
@@ -60,6 +63,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: pipeline
+    
+      - name: Setup yq
+        uses: dcarbone/install-yq-action@v1.1.0
+        with:
+          version: 'v4.30.6'
+          download-compressed: 'true'
+          force: 'false'
+    
+      - name: Change dep version on Chart.yaml file
+        run: yq e -i '.dependencies[0].version = "${{ needs.check_updates.outputs.version }}"' Chart.yaml
+        
+      - run: cat Chart.yaml
     
       - uses: azure/setup-helm@v3
         with:
