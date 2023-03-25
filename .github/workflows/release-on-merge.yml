@@ -1,0 +1,81 @@
+name: Create Release on PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  get-current-tag:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+
+    runs-on:
+      - ubuntu-latest
+
+    outputs:
+      current-tag: ${{ steps.get-current-tag.outputs.tag }}
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Get current tag
+        uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-current-tag
+
+  get-label:
+    needs:
+      - get-current-tag
+
+    runs-on:
+      - ubuntu-latest
+
+    outputs:
+      label: ${{ steps.pr_label.outputs.label }}
+
+    steps:
+      - name: Get PR Label
+        id: pr_label
+        run: |
+          if [ ${{ contains(github.event.pull_request.labels.*.name, 'major')}} = "true" ]
+          then
+            echo "label=major" >> $GITHUB_OUTPUT
+          elif [ ${{ contains(github.event.pull_request.labels.*.name, 'minor')}} = "true" ]
+          then
+            echo "label=feature" >> $GITHUB_OUTPUT
+          elif [ ${{ contains(github.event.pull_request.labels.*.name, 'patch')}} = "true" ]
+          then
+            echo "label=bug" >> $GITHUB_OUTPUT
+          else
+            exit 1
+          fi
+
+  create-release:
+    needs:
+      - get-current-tag
+      - get-label
+
+    runs-on:
+      - ubuntu-latest
+    
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          
+      - name: Change version tag
+        id: new-tag
+        uses: christian-draeger/increment-semantic-version@1.1.0
+        with:
+          current-version: ${{ needs.get-current-tag.outputs.current-tag }}
+          version-fragment: ${{ needs.get-label.outputs.label }} 
+
+      - name: Create release
+        uses: igorrs/create-release@v1
+        with:
+          tag_name: ${{ steps.new-tag.outputs.next-version }}
+          release_name: "Source PR: ${{ github.event.pull_request.url }}"
+          prerelease: false
