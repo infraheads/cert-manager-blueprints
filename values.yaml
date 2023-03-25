@@ -15,6 +15,6 @@ dnsZones:                                                             #OPTIONAL,
 #Certificate Resource
 commonName: example.com       #REQUIRED
 isCA: true                    #OPTIONAL
-
+ 
 certManager:
   enabled: false
