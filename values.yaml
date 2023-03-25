@@ -1,20 +1,35 @@
-namespace: default #OPTIONAL namespace for resources to be deployed
+namespace: <namespace here>
 
 #Cluster Issuer Resource
-email: example@gmail.com                                              #OPTIONAL
-externalAccountBinding:                                               #OPTIONAL
-  keyID:                                                              #REQUIRED if using external account binding
-  secretKey:                                                          #REQUIRED if using external account binding
-preferredChain: "ISRG Root X1"                                        #OPTIONAL
-acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory #REQUIRED, Example of ACME Server URL 
-hostedZoneID:                                                         #OPTIONAL
-region: global                                                        #REQUIRED
-dnsZones:                                                             #OPTIONAL, List of dns zones
-  - domain.name
+email: <email here>                                             
+externalAccountBinding:                                         
+  keyID: <ACME external account secret key ID here>             
+  secretKey: <ACME external secret Key here>                    
+preferredChain: <preferred chain here>                             
+acmeServerUrl: <your ACME server URL here>
+route53:
+  enabled: false
+  hostedZoneID: <aws hosted zone ID here>
+  region: <aws region here>                                                        
+azureDNS:
+  enabled: false
+  clientID: <azure client ID here>
+  clientSecretSecretRef:
+    name: <your secret name here>
+    key: <your key here>
+  subscriptionID: <azure subscription ID here>
+  tenantID: <azure tenant ID here>
+  resourceGroupName: <azure resource group name here>
+  hostedZoneName: <azure hosted zone name here>
+  environment: <environment name here>
+dnsZones:
+  - <domain name 1>
+  - <domain name 2>
 
 #Certificate Resource
-commonName: example.com       #REQUIRED
-isCA: true                    #OPTIONAL
+commonName: <CNAME to include in certificate here>
+isCA: true
  
+#Underlying cert manager operator
 certManager:
   enabled: false

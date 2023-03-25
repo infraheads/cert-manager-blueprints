@@ -11,8 +11,8 @@ spec:
     kind: "ClusterIssuer"
     name: "{{ $.Release.Name }}-route53-clusterissuer"
   secretName: "{{ $.Release.Name }}-certificate-secret"
-  {{ if .dnsZones }}
+  {{- if .dnsZones }}
   dnsNames:
-  {{ .dnsZones | toYaml | indent 4 }}
+  {{- .dnsZones | toYaml | nindent 4 }}
   {{ end }}
 {{- end -}}

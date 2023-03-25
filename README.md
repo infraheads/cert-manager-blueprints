@@ -15,9 +15,11 @@ Workflow will check every sunday at 12am if there is newer version of cert-manag
 
 ## Templates' descriptions
 > __Note__
-The keywords are not explained below, as you can see them simply typing **kubectl explain resource kind**.
+The keywords are NOT explained below, as you can see them simply typing **kubectl explain resource kind** or refering to official cert-manager page to understand keywords correct. Cert-Manager will not give you opportunity to deploy ACME and Certificate Resources as helm charts, but you can find keywords in official docs with below links.<br>
+[Route53](https://cert-manager.io/docs/configuration/acme/dns01/route53)
+[AzureDNS](https://cert-manager.io/docs/configuration/acme/dns01/azuredns)
 
-##### clusterissuer-acme.yaml
+##### clusterissuer-acme.yaml for Route53
 It is preferred to deploy ClusterIssuer instead of Issuer, that it be more globally for cluster. apiVersion is CRD api, you should have deployed cert-manager with its CRDs on your cluster, or just enable dependency in this chart. As this chart is only for AWS Route53, the clusterIssuer solver is route53. **In future, maybe added other solvers based on user requirements.** Let's say (imagine) that by this template you will bring Certificate Authority to your cluster, after which the **certificate.yaml** file will use this template's CA's configurations to create a certificate for you.
 <br>
 <p>

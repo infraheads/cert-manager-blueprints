@@ -24,14 +24,33 @@ spec:
     server: {{ .acmeServerUrl | quote }}
     solvers:
     - dns01:
+    {{- if and (not .azureDNS.enabled) .route53.enabled }}
+      {{- with .route53 }}
         route53:
           {{- if .hostedZoneID }}
           hostedZoneID: {{ .hostedZoneID | quote }}
           {{- end }}
           region: {{ .region | default "global" | quote }}
-      {{- if .dnsZones }}
+      {{- if $.Values.dnsZones }}
       selector:
         dnsZones:
-        {{- .dnsZones | toYaml | nindent 12 }}
+        {{- $.Values.dnsZones | toYaml | nindent 12 }}
       {{- end }}
+      {{- end }}
+    {{- else if and (not .route53.enabled) .azureDNS.enabled }}
+      {{- with .azureDNS }}
+        azureDNS:
+          clientID: {{ .clientID | quote }}
+          {{- if and .clientSecretSecretRef.name .clientSecretSecretRef.key }}
+          clientSecretSecretRef:
+            name: {{ .clientSecretSecretRef.name | quote }}
+            key: {{ .clientSecretSecretRef.key | quote }}
+          {{- end }}
+          subscriptionID: {{- .subscriptionID | quote }}
+          tenantID: {{- .tenantID | quote }}
+          resourceGroupName: {{- .resourceGroupName | quote}}
+          hostedZoneName: {{- .hostedZoneName | quote }}
+          environment: {{- .environment | quote }}
+      {{- end}}
+    {{- end }}
 {{- end }}
