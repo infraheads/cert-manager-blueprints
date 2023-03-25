@@ -75,6 +75,8 @@ jobs:
 
       - name: Create release
         uses: igorrs/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.new-tag.outputs.next-version }}
           release_name: "Source PR: ${{ github.event.pull_request.url }}"
